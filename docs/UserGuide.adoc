@@ -3,43 +3,43 @@
 :toc: manual
 :toc-placement: preamble
 
-This is document shows how to use `teiid-spring-boot-starter` run Teiid with your Spring Application.
+This document shows how to use `teiid-spring-boot-starter` in your Spring Boot Application.
 
 == What is Teiid Spring Boot?
-Teiid Spring Boot is a framework for developing Spring applications, that are looking to utilize Data Virtualization features. Data Virtualization technology provides seamless integration with multiple hetrogenious data sources. For example, you can combine data from Oracle database with data from Microsoft SQL Server, REST Service, Flat File etc. You not only integrate the data, you can also create your own Views of that integrated data. The Data Virtualization technology is based on link:http://teiid.org[Teiid]
+Teiid Spring Boot is a framework for developing Spring applications, that are looking to utilize Data Virtualization features. Data Virtualization technology provides seamless integration with multiple heterogeneous data sources. For example, you can combine data from Oracle database with data from Microsoft SQL Server, REST Service, Flat File etc. You not only integrate the data, you can also create your own Views of that integrated data. The Data Virtualization technology is based on link:http://teiid.org[Teiid]
 
-Teiid Spring Boot is a new bootstapping mechanism of Teiid for rapid development - including the optional use of Annotations and the Spring ecosystem. If you are familiar with Spring, and in particular the JPA or JDBC template model, then most of learning is already done.
+Teiid Spring Boot is a new bootstapping mechanism of Teiid for rapid development - including the optional use of Annotations and the Spring ecosystem. If you are familiar with Spring, and in particular the JPA or JDBC template model, then most learning is already done.
 
 == How is Teiid Spring Boot different from Teiid?
-If you are familiar with Teiid or Teiid Embedded, most of the functionality you are after in using Teiid is still there. However it requires new Spring paradigms to utilize.
+If you are familiar with Teiid or Teiid Embedded, most of the functionality you are after in using Teiid is still there. However, it requires new Spring paradigms to utilize.
 
-Teiid Spring Boot has two flavors.  One that is purely code driven, and another that supports a DDL VDB.
+Teiid Spring Boot has two flavors. One that is purely code driven, and another that supports a DDL VDB.
 
 === VDB-less Development
 
-There is NO VDB. You read it correct! OK, we lied there is no user facing VDB. In the regular Teiid development one needs to use tooling like Teiid Designer or use DDL based files and build Virtual Database (VDB), then deploy that into a server environment. Data sources need to be configured before you can use virtual views in your application. 
+There is NO VDB. You read it correct! OK, we lied there is no user facing VDB. In regular Teiid development, one needs to use tooling like Teiid Designer or use DDL based files and build Virtual Database (VDB), then deploy that into a server environment. Data sources need to be configured before you can use virtual views in your application.
 
-With Teiid Spring Boot there is no need to use the any tooling - your application layer and View definition layer become one. The virtual View construction happens with Annotations in your Java code. It is exactly the same steps as defining an Entity using JPA framework with couple extra annotations that are specific to Teiid.
+With Teiid Spring Boot, there is no need to use any tooling - your application layer and View definition layer become one. The virtual View construction happens with Annotations in your Java code. the exact same steps are taken as when defining an Entity using JPA framework, with a couple of extra annotations that are specific to Teiid.
 
-In the regular Teiid development, Teiid is typically accessed as an external database. You connect to it using a JDBC connection, or layer a JPA on top of the JDBC connection. In VDB-less Teiid Spring Boot, it is more a framework/library to join the data. The Teiid engine is bootstrapped as implicit embedded database on your application start, which user doesn't really need to know about. The VDB is used via JPA and other Spring constructs without the need for exposing a socket based server for database connections.
+In regular Teiid development, Teiid is typically accessed as an external database. You connect to it using a JDBC connection, or layer a JPA on top of the JDBC connection. In VDB-less Teiid Spring Boot, it is more of a framework/library to join the data. The Teiid engine is bootstrapped as an implicit embedded database on your application start, which users don't really need to know about. The VDB is used via JPA and other Spring constructs without the need for exposing a socket based server for database connections.
 
 VDB-less Teiid Spring Boot is not really designed for running third party BI tools like Tableau, Business Objects etc to some business reports. This is designed specifically for its usage with Microservices and Spring based Java applications.
 
-Since this is Spring Boot, this only supports Java language.
+Since this is Spring Boot, only Java is supported.
 
 === VDB Based Development
 
-Most of the user guide addresses the VDB-less case.  However if you need traditional Teiid features, such as utilizing a DDL file and exposing that explicit database via JDBC, pg, OData, then VDB based development is for you.
+Most of the user guide addresses the VDB-less case. However, if you need traditional Teiid features, such as utilizing a DDL file and exposing that explicit database via JDBC, pg, OData, then VDB based development is for you.
 
 Please refer to the link:../samples/vdb/Readme.adoc[sample].
 
 == Your First Example, Join Data From Two Postgres Databases
 
-This guide walks you through the process of building an application that uses Teiid Spring Boot and JPA to store and retrieve data from two relational databases as a *single* call
+This guide walks you through the process of building an application that uses Teiid Spring Boot and JPA to store and retrieve data from two relational databases as a *single* call.
 
 === What you’ll build
 
-You’ll build an application that combines the data from two separate tables from two separate Postgres databases. For simplicity, this example assumes both databases identical and both have identical schema as follows.
+You’ll build an application that combines the data from two separate tables from two separate Postgres databases. For simplicity, this example assumes both databases to be identical and to both have an identical schema as follows.
 
 [source,sql]
 ----
@@ -66,9 +66,9 @@ Go to link:http://start.spring.io/[Spring Initializer] and type in "JPA" in depe
 
 Otherwise, in a project directory of your choosing, create the following sub-directory structure; for example, with
 ----
-mkdir -p src/main/java/example on *nix systems:
+mkdir -p src/main/java/example
 ----
-and create pom.xml file of your choosing and add following maven dependencies
+on *nix systems and create a pom.xml file of your choosing and add the following maven dependencies
 
 
 [source,xml]
@@ -104,7 +104,7 @@ Since we are going to connect Postgres database, add the JDBC driver dependency.
 ----
 
 === Define the Data Sources
-In this example, first we need to define all of the data sources that are in play. To capture data source configuration information, create the following Java class. This pattern is prescribed in Spring Boot when working more than single database. Please note the annotation `@ConfigurationProperties` defines the properties prefix as well identifier for datasource. 
+In this example, first we need to define all the data sources that are in play. To capture data source configuration information, create the following Java class. This pattern is prescribed in Spring Boot when working with more than one database. Please note the annotation `@ConfigurationProperties` defines the properties prefix as identifier for the datasource.
 
 [source,java]
 .*src/main/java/org/example/DataSources.java*
@@ -126,7 +126,7 @@ public class DataSources {
 }
 ----
 
-NOTE: Keep the data source property name and method name exactly *SAME*. From above example "africa" in property and africa() method, keep the names *same*, as additional properties will *not* be discovered otherwise.
+NOTE: Keep the data source property name and method name exactly the *SAME*. From above example "africa" in property and africa() method, the names must be *identical*, as additional properties will *not* be discovered otherwise.
 
 We are creating two(2) data source connections, with names "africa" and "europe". Now we need to provide the corresponding configuration for these data sources. In "application.properties" file, define *your* configuration similar to
 
@@ -138,7 +138,7 @@ spring.datasource.africa.username=<username>
 spring.datasource.africa.password=<password>
 spring.datasource.africa.driver-class-name=org.postgresql.Driver
 
-# these Teiid specific source import properties
+# Teiid specific source import properties
 spring.datasource.africa.importer.SchemaPattern=public
 
 spring.datasource.europe.url=jdbc:postgresql://localhost/europe
@@ -146,14 +146,14 @@ spring.datasource.europe.username=<username>
 spring.datasource.europe.password=<password>
 spring.datasource.europe.driver-class-name=org.postgresql.Driver
 
-# these Teiid specific source import properties
+# Teiid specific source import properties
 spring.datasource.europe.importer.SchemaPattern=public
 ----
 
-Change the property values above to fit your database environment. The property with "importer.SchemaPattern" post fix defines that database schema that you would like to access tables from. There are lot more properties to restrict/allow what schema objects you want to work with. Check Teiid documentation for JDBC Translator "import" properties.
+Change the property values above to fit your database environment. The property with "importer.SchemaPattern" post fix defines the database schema that you would like to access tables from. There are a lot more properties to restrict/allow what schema objects you want to work with. Check Teiid documentation for JDBC Translator "import" properties.
 
 === Define View/Entity Class
-Now it is time to define the main Entity or View class. We have the Customer table in both the databases that we need to union as one. For that, create Entity like below
+Now it is time to define the main Entity or View class. We have the Customer table in both the databases that we need to union as one. For that, create an Entity like below
 
 [source,java]
 .src/main/java/com/example/Customer.java
@@ -185,19 +185,19 @@ public class Customer {
     }
 }
 ----
-Here you have a Customer class with three attributes, the id, the Firstname, and the LastName. You also have two constructors. The default constructor only exists for the sake of JPA. You won’t use it directly. The other constructor is the one you’ll use to create instances of Customer to be used from the database.
+Here you have a Customer class with three attributes: the `id`, the `firstname` and the `lastName`. You also have two constructors. The default constructor only exists for the sake of JPA. You won’t use it directly. The other constructor is the one you’ll use to create instances of Customer to be used from the database.
 
 NOTE: In this guide, the typical getters and setters and import statements have been left out for brevity.
 
-The Customer class is annotated with `@Entity`, indicating that it is a JPA entity. The `@Table` annotation, is optional, but to give a different unioned name in Teiid you can define it. Sometimes @Table also need to be used to avoid the naming conflicts.
+The Customer class is annotated with `@Entity`, indicating that it is a JPA entity. The `@Table` annotation, is optional, but to give a different unioned name in Teiid you can define it. Sometimes @Table also needs to be used to avoid naming conflicts.
 
-The Customer’s id property is annotated with `@Id` so that JPA will recognize it as the object’s identity. The id property.
+The id property is annotated with `@Id` so that JPA will recognize it as the object’s identity.
 
-The other two properties, name and ssn are left with out any annotation. It is assumed that they’ll be mapped to columns that share the same name as the properties themselves.
+The other two properties, firstName and lastName, are left without any attributes on the @Column annotation. It is assumed that they’ll be mapped to columns that share the same name as the properties themselves.
 
-*@SelectQuery* annotation is where most of the magic of Teiid is occurring. This defines a query that joins the tables from two separate data sources. This can be any ANSI compatible SQL query, make sure the entities at data source level are fully qualified. For ex: `africa.Customer`, where `africa` represents the *data source* name you created in `Datasource.java` class.
+The *@SelectQuery* annotation is where most of the magic of Teiid is occurring. This defines a query that joins the tables from two separate data sources. This can be any ANSI compatible SQL query, make sure the entities at data source level are fully qualified. For ex: `africa.Customer`, where `africa` represents the *data source* name you created in `Datasource.java` class.
 
-At application boot time, Teiid Spring Boot scans the application's packages for these annotations and builds the respective metadata required to create a virtual database internally and deploys to a internal server. To do this annotation scan, define the application package name in `application.properties` file as below.
+At application boot time, Teiid Spring Boot scans the application's packages for these annotations and builds the respective metadata required to create a virtual database internally and deploys to an internal server. To do this annotation scan, define the application package name in `application.properties` file as below.
 
 [source,text]
 .*src/main/resources/application.properties*
@@ -205,7 +205,7 @@ At application boot time, Teiid Spring Boot scans the application's packages for
 spring.teiid.model.package=org.example
 ----
 
-In absence of this property entire classpath is scanned, that could take significant time depending upon all the libraries in your application.
+In absence of this property the entire classpath is scanned, that could take significant time depending upon all the libraries in your application.
 
 For more available annotations, refer to Reference Guide.
 
@@ -257,7 +257,7 @@ public class Application implements CommandLineRunner {
 }
 ----
 
-Now when you execute this application, you should see results like below, which are combined results from both of your Postges database tables. 
+Now when you execute this application, you should see results like below, which are combined results from both of your Postgres database tables.
 
 ----
 Customer [id=1002, firstName=Joseph, lastName=Smith]
@@ -266,10 +266,11 @@ Customer [id=1004, firstName=Jane, lastName=Aire]
 Customer [id=1005, firstName=Charles, lastName=Jones]
 ----
 
-If you need to do insert/update/delete with above example you would need to define additional annotations for them. See
-@InsertQuery, @UpdateQuery and @DeleteQuery. If you need to read data from a JSON based payload, see @JsonTable annotation. Using similar techniques you combine data from *any* data source. Currently we have rdbms, file, web-service, excel support but all the data sources that are supported by Teiid will be supported in this framework very soon. If you want to contribute please let us know.
+If you need to do insert/update/delete with above example, you would need to define additional annotations for them. See `@InsertQuery`, `@UpdateQuery` and `@DeleteQuery`. If you need to read data from a JSON based payload, see `@JsonTable` annotation.
 
-For full working example of this can be found link:../samples/example[here]
+Using similar techniques, you combine data from *any* data source. Currently, we have rdbms, file, web-service and excel support, but all the data sources that are supported by Teiid will be supported in this framework very soon. If you want to contribute, please let us know.
+
+A full working example of this can be found link:../samples/example[here]
 
 == Available Examples
 
